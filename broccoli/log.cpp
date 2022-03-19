@@ -175,6 +175,10 @@ namespace broccoli {
 		, m_level(level) {
 	}
 
+	void LogEvent::format(const char* fmt, ...) {
+
+	}
+
 	Logger::Logger(const std::string& name)
 		: m_name(name)
 		, m_level(LogLevel::DEBUG) {

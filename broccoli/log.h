@@ -58,7 +58,7 @@ namespace broccoli {
 		std::shared_ptr<Logger> getLogger() const { return m_logger; }
 
 		std::stringstream& getSS() { return m_ss; }
-
+		void format(const char* fmt, ...);
 	private:
 		const char* m_file = nullptr;	// 文件名
 		int32_t m_line = 0;				// 行号
