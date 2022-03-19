@@ -17,5 +17,7 @@ int main()
 	BROCCOLI_LOG_DEBUG(logger) << "hello broccoli log";
 	BROCCOLI_LOG_ERROR(logger) << "hello broccoli log error";
 
+	SYLAR_LOG_FMT_ERROR(logger, "you are %s", "shabi");
+
 	return 0;
 }

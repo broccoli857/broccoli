@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <stdarg.h>
 
 #define BROCCOLI_LOG_LEVEL(logger, level) \
 	if(logger->getLevel() <= level) \
@@ -19,6 +20,18 @@
 #define BROCCOLI_LOG_WARN(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::WARN)
 #define BROCCOLI_LOG_ERROR(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::ERROR)
 #define BROCCOLI_LOG_FATAL(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::FATAL)
+
+#define SYLAR_LOG_FMT_LEVEL(logger, level, fmt, ...) \
+	if(logger->getLevel() <= level) \
+		broccoli::LogEventWrap(broccoli::LogEvent::ptr(new broccoli::LogEvent(logger, level, \
+							__FILE__, __LINE__, 0, broccoli::GetThreadId(), \
+							broccoli::GetFiberId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+
+#define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::DEBUG, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_INFO(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::INFO, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_WARN(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::WARN, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::ERROR, fmt, __VA_ARGS__)
+#define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 namespace broccoli {
 
@@ -56,9 +69,10 @@ namespace broccoli {
 		std::string getContent() const { return m_ss.str(); }
 		LogLevel::Level getLevel() const { return m_level; }
 		std::shared_ptr<Logger> getLogger() const { return m_logger; }
-
 		std::stringstream& getSS() { return m_ss; }
+
 		void format(const char* fmt, ...);
+		void format(const char* fmt, va_list al);
 	private:
 		const char* m_file = nullptr;	// 文件名
 		int32_t m_line = 0;				// 行号
@@ -76,6 +90,8 @@ namespace broccoli {
 	public:
 		LogEventWrap(LogEvent::ptr e);
 		~LogEventWrap();
+
+		LogEvent::ptr getEvent() const { return m_event; }
 
 		std::stringstream& getSS();
 	private:
