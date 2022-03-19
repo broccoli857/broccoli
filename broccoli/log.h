@@ -107,6 +107,7 @@ namespace broccoli {
 
 		void addAppender(LogAppender::ptr appender);
 		void delAppender(LogAppender::ptr appender);
+
 		void setLevel(LogLevel::Level val) { m_level = val; }
 		LogLevel::Level getLevel() const{ return m_level; }
 

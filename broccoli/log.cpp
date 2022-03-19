@@ -62,9 +62,9 @@ namespace broccoli {
 		}
 	};
 
-	class ThreadIDFormatItem : public LogFormatter::FormatItem {
+	class ThreadIdFormatItem : public LogFormatter::FormatItem {
 	public:
-		ThreadIDFormatItem(const std::string& str = "") {
+		ThreadIdFormatItem(const std::string& str = "") {
 		}
 		void format(std::ostream& os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override {
 			os << event->getThreadId();
@@ -84,10 +84,18 @@ namespace broccoli {
 	public:
 		DateTimeFormatItem(const std::string& format = "%Y:%m:%d %H:%M:%S")
 			:m_format(format) {
+			if (m_format.empty()) {
+				m_format = "%Y-%m-%d %H:%M:%S";
+			}
 		}
 
 		void format(std::ostream& os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override {
-			os << event->getTime();
+			struct tm tm;
+			time_t time = event->getTime();	// 获取用户传入的时间戳
+			localtime_r(&time, &tm);
+			char buf[64];
+			strftime(buf, sizeof(buf), m_format.c_str(), &tm);
+			os << buf;
 		}
 	private:
 		std::string m_format;
@@ -120,6 +128,15 @@ namespace broccoli {
 		}
 	};
 
+	class TabFormatItem : public LogFormatter::FormatItem {
+	public:
+		TabFormatItem(const std::string& str = "") {
+		}
+		void format(std::ostream& os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override {
+			os << "\t";
+		}
+	};
+
 	class StringFormatItem : public LogFormatter::FormatItem {
 	public:
 		StringFormatItem(const std::string& str)
@@ -141,13 +158,12 @@ namespace broccoli {
 		, m_threadId(thread_id)
 		, m_fiberId(fiber_id)
 		, m_time(time) {
-
 	}
 
 	Logger::Logger(const std::string& name)
 		: m_name(name)
 		, m_level(LogLevel::DEBUG) {
-		m_formatter.reset(new LogFormatter("%d [%p] %F %l %m %n"));
+		m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S} %t %F [%p] [%c] %f:%l%T%m%n"));
 	}
 
 	void Logger::addAppender(LogAppender::ptr appender) {
@@ -205,7 +221,6 @@ namespace broccoli {
 
 	FileLogAppender::FileLogAppender(const std::string filename)
 			: m_filename(filename) {
-
 	}
 
 	bool FileLogAppender::reopen() {
@@ -318,12 +333,12 @@ namespace broccoli {
 			XX(p, LevelFormatItem),             //p:日志级别
 			XX(r, ElapseFormatItem),            //r:累计毫秒数
 			XX(c, NameFormatItem),              //c:日志名称
-			//XX(t, ThreadIdFormatItem),          //t:线程id
+			XX(t, ThreadIdFormatItem),          //t:线程id
 			XX(n, NewLineFormatItem),           //n:换行
 			XX(d, DateTimeFormatItem),          //d:时间
-			//XX(f, FilenameFormatItem),          //f:文件名
+			XX(f, FileNameFormatItem),          //f:文件名
 			XX(l, LineFormatItem),              //l:行号
-			//XX(T, TabFormatItem),               //T:Tab
+			XX(T, TabFormatItem),               //T:Tab
 			XX(F, FiberIdFormatItem),           //F:协程id
 			//XX(N, ThreadNameFormatItem),        //N:线程名称
 #undef XX
@@ -343,8 +358,7 @@ namespace broccoli {
 					m_items.push_back(it->second(std::get<1>(i)));
 				}
 			}
-
-			std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
+			//std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
 		}
 		//std::cout << m_items.size() << std::endl;
 	}
