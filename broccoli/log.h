@@ -8,16 +8,44 @@
 #include <fstream>
 #include <vector>
 
+#define BROCCOLI_LOG_LEVEL(logger, level) \
+	if(logger->getLevel() <= level) \
+		broccoli::LogEventWrap(broccoli::LogEvent::ptr(new broccoli::LogEvent(logger, level, \
+							__FILE__, __LINE__, 0, broccoli::GetThreadId(), \
+							broccoli::GetFiberId(), time(0)))).getSS()
+
+#define BROCCOLI_LOG_DEBUG(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::DEBUG)
+#define BROCCOLI_LOG_INFO(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::INFO)
+#define BROCCOLI_LOG_WARN(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::WARN)
+#define BROCCOLI_LOG_ERROR(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::ERROR)
+#define BROCCOLI_LOG_FATAL(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::FATAL)
+
 namespace broccoli {
 
 	class Logger;
+
+	// 日志级别
+	class LogLevel {
+	public:
+		enum Level
+		{
+			DEBUG = 1,
+			INFO,
+			WARN,
+			ERROR,
+			FATAL
+		};
+
+		static const char* ToString(LogLevel::Level level);
+	};
 
 	// 日志事件
 	class LogEvent {
 	public:
 		typedef std::shared_ptr<LogEvent> ptr;
-		LogEvent(const char* file, int32_t line, uint32_t elapse, 
-			uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+		LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level,
+				const char* file, int32_t line, uint32_t elapse, 
+				uint32_t thread_id, uint32_t fiber_id, uint64_t time);
 
 		const char* getFile() const { return m_file; }
 		int32_t getLine() const { return m_line; }
@@ -26,6 +54,8 @@ namespace broccoli {
 		uint32_t getFiberId() const { return m_fiberId; }
 		uint64_t getTime() const { return m_time; }
 		std::string getContent() const { return m_ss.str(); }
+		LogLevel::Level getLevel() const { return m_level; }
+		std::shared_ptr<Logger> getLogger() const { return m_logger; }
 
 		std::stringstream& getSS() { return m_ss; }
 
@@ -37,21 +67,19 @@ namespace broccoli {
 		uint32_t m_fiberId = 0;			// 协程id
 		uint64_t m_time = 0;			// 时间戳
 		std::stringstream  m_ss;
+
+		std::shared_ptr<Logger> m_logger;
+		LogLevel::Level m_level;
 	};
 
-	// 日志级别
-	class LogLevel {
+	class LogEventWrap {
 	public:
-		enum Level
-		{
-			DEBUG=1,
-			INFO,
-			WARN,
-			ERROR,
-			FATAL
-		};
+		LogEventWrap(LogEvent::ptr e);
+		~LogEventWrap();
 
-		static const char* ToString(LogLevel::Level level);
+		std::stringstream& getSS();
+	private:
+		LogEvent::ptr m_event;
 	};
 
 	// 日志格式器

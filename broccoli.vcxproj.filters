@@ -3,9 +3,11 @@
   <ItemGroup>
     <ClCompile Include="broccoli\log.cpp" />
     <ClCompile Include="test\test.cpp" />
+    <ClCompile Include="broccoli\util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="broccoli\log.h" />
+    <ClInclude Include="broccoli\util.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="broccoli">

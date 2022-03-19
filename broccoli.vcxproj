@@ -78,15 +78,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemGroup>
     <ClInclude Include="broccoli\log.h" />
+    <ClInclude Include="broccoli\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="broccoli\log.cpp" />
+    <ClCompile Include="broccoli\util.cpp" />
     <ClCompile Include="test\test.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>-lpthread;$(StlAdditionalDependencies);%(Link.AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
