@@ -78,6 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemGroup>
     <ClInclude Include="broccoli\log.h" />
+    <ClInclude Include="broccoli\singleton.h" />
     <ClInclude Include="broccoli\util.h" />
   </ItemGroup>
   <ItemGroup>

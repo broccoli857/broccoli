@@ -7,6 +7,9 @@ int main()
 	broccoli::Logger::ptr logger(new broccoli::Logger);
 	logger->addAppender(broccoli::LogAppender::ptr(new broccoli::StdoutLogAppender));
 
+	broccoli::FileLogAppender::ptr file_appender(new broccoli::FileLogAppender("./log.txt"));
+	logger->addAppender(file_appender);
+
 	//broccoli::LogEvent::ptr event(new broccoli::LogEvent(__FILE__, __LINE__, 0, broccoli::GetThreadId(),
 		//broccoli::GetFiberId(), time(0)));
 	//event->getSS() << "hello broccoli log";
@@ -17,7 +20,10 @@ int main()
 	BROCCOLI_LOG_DEBUG(logger) << "hello broccoli log";
 	BROCCOLI_LOG_ERROR(logger) << "hello broccoli log error";
 
-	SYLAR_LOG_FMT_ERROR(logger, "you are %s", "shabi");
+	BROCCOLI_LOG_FMT_ERROR(logger, "you are %s", "aaaaa");
+
+	auto l = broccoli::loggerMgr::GetInstance()->getLogger("XX");
+	BROCCOLI_LOG_INFO(logger) << "xxxx";
 
 	return 0;
 }

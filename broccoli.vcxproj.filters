@@ -8,6 +8,7 @@
   <ItemGroup>
     <ClInclude Include="broccoli\log.h" />
     <ClInclude Include="broccoli\util.h" />
+    <ClInclude Include="broccoli\singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="broccoli">

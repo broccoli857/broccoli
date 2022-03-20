@@ -314,7 +314,6 @@ namespace broccoli {
 				if (fmt_status == 0) {
 					if (m_pattern[n] == '{') {
 						str = m_pattern.substr(i + 1, n - i - 1);
-						//std::cout << "*" << str << std::endl;
 						fmt_status = 1; //½âÎö¸ñÊ½
 						fmt_begin = n;
 						++n;
@@ -324,7 +323,6 @@ namespace broccoli {
 				else if (fmt_status == 1) {
 					if (m_pattern[n] == '}') {
 						fmt = m_pattern.substr(fmt_begin + 1, n - fmt_begin - 1);
-						//std::cout << "#" << fmt << std::endl;
 						fmt_status = 0;
 						++n;
 						break;
@@ -389,8 +387,29 @@ namespace broccoli {
 					m_items.push_back(it->second(std::get<1>(i)));
 				}
 			}
-			//std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
 		}
-		//std::cout << m_items.size() << std::endl;
+	}
+
+	LoggerManager::LoggerManager() {
+		m_root.reset(new Logger);
+		m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
+
+		init();
+	}
+
+	Logger::ptr LoggerManager::getLogger(const std::string& name) {
+		auto it = m_loggers.find(name);
+		if (it != m_loggers.end()) {
+			return it->second;
+		}
+
+		Logger::ptr logger(new Logger(name));
+		//logger->m_root = m_root;
+		m_loggers[name] = logger;
+		return logger;
+	}
+
+	void LoggerManager::init() {
+
 	}
 }

@@ -8,6 +8,8 @@
 #include <fstream>
 #include <vector>
 #include <stdarg.h>
+#include <map>
+#include "singleton.h"
 
 #define BROCCOLI_LOG_LEVEL(logger, level) \
 	if(logger->getLevel() <= level) \
@@ -21,17 +23,17 @@
 #define BROCCOLI_LOG_ERROR(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::ERROR)
 #define BROCCOLI_LOG_FATAL(logger) BROCCOLI_LOG_LEVEL(logger, broccoli::LogLevel::FATAL)
 
-#define SYLAR_LOG_FMT_LEVEL(logger, level, fmt, ...) \
+#define BROCCOLI_LOG_FMT_LEVEL(logger, level, fmt, ...) \
 	if(logger->getLevel() <= level) \
 		broccoli::LogEventWrap(broccoli::LogEvent::ptr(new broccoli::LogEvent(logger, level, \
 							__FILE__, __LINE__, 0, broccoli::GetThreadId(), \
 							broccoli::GetFiberId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
 
-#define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::DEBUG, fmt, __VA_ARGS__)
-#define SYLAR_LOG_FMT_INFO(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::INFO, fmt, __VA_ARGS__)
-#define SYLAR_LOG_FMT_WARN(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::WARN, fmt, __VA_ARGS__)
-#define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::ERROR, fmt, __VA_ARGS__)
-#define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, broccoli::LogLevel::FATAL, fmt, __VA_ARGS__)
+#define BROCCOLI_LOG_FMT_DEBUG(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::DEBUG, fmt, __VA_ARGS__)
+#define BROCCOLI_LOG_FMT_INFO(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::INFO, fmt, __VA_ARGS__)
+#define BROCCOLI_LOG_FMT_WARN(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::WARN, fmt, __VA_ARGS__)
+#define BROCCOLI_LOG_FMT_ERROR(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::ERROR, fmt, __VA_ARGS__)
+#define BROCCOLI_LOG_FMT_FATAL(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 namespace broccoli {
 
@@ -130,6 +132,9 @@ namespace broccoli {
 
 		void setFormatter(LogFormatter::ptr val) { m_formatter = val; }
 		LogFormatter::ptr getFormatter() const { return m_formatter; }
+
+		LogLevel::Level getLevel() const { return m_level; }
+		void setLevel(LogLevel::Level val) { m_level = val; }
 	protected:
 		LogLevel::Level m_level = LogLevel::DEBUG;
 		LogFormatter::ptr m_formatter;
@@ -185,4 +190,17 @@ namespace broccoli {
 		std::string m_filename;
 		std::ofstream m_filestream;
 	};
+
+	class LoggerManager {
+	public:
+		LoggerManager();
+		Logger::ptr getLogger(const std::string& name);
+
+		void init();
+	private:
+		std::map<std::string, Logger::ptr> m_loggers;
+		Logger::ptr m_root;
+	};
+
+	typedef broccoli::Singleton<LoggerManager> loggerMgr;
 }
