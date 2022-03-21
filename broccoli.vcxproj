@@ -77,6 +77,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemGroup>
+    <ClInclude Include="broccoli\config.h" />
     <ClInclude Include="broccoli\log.h" />
     <ClInclude Include="broccoli\singleton.h" />
     <ClInclude Include="broccoli\util.h" />
