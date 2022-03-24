@@ -1,6 +1,9 @@
 #include <iostream>
 #include "../broccoli/log.h"
 #include "../broccoli/util.h"
+#include "../broccoli/config.h"
+
+broccoli::ConfigVar<int>::ptr g_int_value_config = broccoli::Config::Lookup("system.port", 8080, "system port");
 
 int main() 
 {
@@ -23,6 +26,9 @@ int main()
 
 	auto l = broccoli::loggerMgr::GetInstance()->getLogger("XX");
 	BROCCOLI_LOG_INFO(logger) << "xxxx";
+
+	BROCCOLI_LOG_INFO(logger) << g_int_value_config->getValue();
+	BROCCOLI_LOG_INFO(logger) << g_int_value_config->toString();
 
 	return 0;
 }

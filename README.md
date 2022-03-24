@@ -13,7 +13,7 @@ Centos 7；Visual Studio 2019
 
 ## 配置系统
 
-
+ - Config ： 使用yaml文件进行配置
 
 
 ## 协程库封装

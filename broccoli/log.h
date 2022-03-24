@@ -35,6 +35,8 @@
 #define BROCCOLI_LOG_FMT_ERROR(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::ERROR, fmt, __VA_ARGS__)
 #define BROCCOLI_LOG_FMT_FATAL(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::FATAL, fmt, __VA_ARGS__)
 
+#define BROCCOLI_LOG_ROOT() broccoli::loggerMgr::GetInstance->getRoot()
+
 namespace broccoli {
 
 	class Logger;
