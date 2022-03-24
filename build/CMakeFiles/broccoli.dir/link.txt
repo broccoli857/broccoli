@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC  -rdynamic -o0 -ggdb -std=c++11 -Wno-deprecated -Werror -Wno-unused-function  -shared -Wl,-soname,libbroccoli.so -o libbroccoli.so CMakeFiles/broccoli.dir/broccoli/log.cpp.o CMakeFiles/broccoli.dir/broccoli/util.cpp.o 

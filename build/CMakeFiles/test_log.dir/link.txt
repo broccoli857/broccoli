@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic -o0 -ggdb -std=c++11 -Wno-deprecated -Werror -Wno-unused-function   CMakeFiles/test_log.dir/tests/test.cpp.o  -o test_log -rdynamic libbroccoli.so -Wl,-rpath,/home/cheng/workspace/broccoli/build 
