@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/broccoli.dir/broccoli/config.cpp.o"
   "CMakeFiles/broccoli.dir/broccoli/log.cpp.o"
   "CMakeFiles/broccoli.dir/broccoli/util.cpp.o"
   "libbroccoli.pdb"

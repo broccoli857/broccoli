@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/cheng/workspace/broccoli/broccoli/config.cpp
-config.h
-/home/cheng/workspace/broccoli/broccoli/config.h
-
 /home/cheng/workspace/broccoli/broccoli/config.h
 memory
 -
@@ -17,16 +13,6 @@ boost/lexical_cast.hpp
 -
 log.h
 /home/cheng/workspace/broccoli/broccoli/log.h
-
-/home/cheng/workspace/broccoli/broccoli/log.cpp
-log.h
-/home/cheng/workspace/broccoli/broccoli/log.h
-iostream
--
-map
--
-functional
--
 
 /home/cheng/workspace/broccoli/broccoli/log.h
 string
@@ -69,4 +55,10 @@ stdio.h
 -
 stdint.h
 -
+
+/home/cheng/workspace/broccoli/tests/test_config.cpp
+../broccoli/config.h
+/home/cheng/workspace/broccoli/broccoli/config.h
+../broccoli/log.h
+/home/cheng/workspace/broccoli/broccoli/log.h
 

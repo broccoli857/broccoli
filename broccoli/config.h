@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-//#include <boost/lexical_cast.hpp>
+#include <boost/lexical_cast.hpp>
 #include "log.h"
 
 namespace broccoli {

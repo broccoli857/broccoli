@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -27,6 +27,8 @@ map
 -
 singleton.h
 /home/cheng/workspace/broccoli/broccoli/singleton.h
+util.h
+/home/cheng/workspace/broccoli/broccoli/util.h
 
 /home/cheng/workspace/broccoli/broccoli/singleton.h
 memory

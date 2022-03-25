@@ -9,7 +9,7 @@ include_directories(.)
 set(LIB_SRC
     broccoli/log.cpp
     broccoli/util.cpp
-    #broccoli/config.cpp
+    broccoli/config.cpp
     )
 
 add_library(broccoli SHARED ${LIB_SRC})
@@ -20,9 +20,9 @@ add_executable(test_log tests/test.cpp)
 add_dependencies(test_log broccoli)
 target_link_libraries(test_log broccoli)
 
-#add_executable(test_config tests/test_config.cpp)
-#add_dependencies(test_config broccoli)
-#target_link_libraries(test_config broccoli)
+add_executable(test_config tests/test_config.cpp)
+add_dependencies(test_config broccoli)
+target_link_libraries(test_config broccoli)
 
 SET(PROPERTIES_OUTPUT_NAME ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_NAME ${PROJECT_SOURCE_DIR}/lib)

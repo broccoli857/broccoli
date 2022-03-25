@@ -4,10 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/cheng/workspace/broccoli/broccoli/config.cpp" "/home/cheng/workspace/broccoli/build/CMakeFiles/broccoli.dir/broccoli/config.cpp.o"
   "/home/cheng/workspace/broccoli/broccoli/log.cpp" "/home/cheng/workspace/broccoli/build/CMakeFiles/broccoli.dir/broccoli/log.cpp.o"
   "/home/cheng/workspace/broccoli/broccoli/util.cpp" "/home/cheng/workspace/broccoli/build/CMakeFiles/broccoli.dir/broccoli/util.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_CXX
+  "broccoli_EXPORTS"
+  )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
