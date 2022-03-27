@@ -9,7 +9,10 @@ find_package(yaml-cpp REQUIRED)
 
 include_directories(.)
 include_directories(${YAML_CPP_INCLUDE_DIR})
+include_directories(/usr/lib)
 # include_directories(/usr/local/include/yaml-cpp)
+
+find_library(YAMLCPP yaml-cpp)
 
 set(LIB_SRC
     broccoli/log.cpp
@@ -23,7 +26,7 @@ add_library(broccoli SHARED ${LIB_SRC})
 
 add_executable(test_log tests/test.cpp)
 add_dependencies(test_log broccoli)
-target_link_libraries(test_log broccoli)
+target_link_libraries(test_log broccoli yaml-cpp)
 
 add_executable(test_config tests/test_config.cpp)
 add_dependencies(test_config broccoli)

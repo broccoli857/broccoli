@@ -6,5 +6,5 @@ CXX_FLAGS =  -rdynamic -o0 -ggdb -std=c++11 -Wno-deprecated -Werror -Wno-unused-
 
 CXX_DEFINES = -Dbroccoli_EXPORTS
 
-CXX_INCLUDES = -I/home/cheng/workspace/broccoli/. 
+CXX_INCLUDES = -I/home/cheng/workspace/broccoli/. -I/usr/lib 
 

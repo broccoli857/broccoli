@@ -86,6 +86,7 @@ test_log_EXTERNAL_OBJECTS =
 test_log: CMakeFiles/test_log.dir/tests/test.cpp.o
 test_log: CMakeFiles/test_log.dir/build.make
 test_log: libbroccoli.so
+test_log: /usr/local/lib64/libyaml-cpp.a
 test_log: CMakeFiles/test_log.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cheng/workspace/broccoli/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable test_log"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test_log.dir/link.txt --verbose=$(VERBOSE)
