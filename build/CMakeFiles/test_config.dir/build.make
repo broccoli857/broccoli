@@ -86,6 +86,7 @@ test_config_EXTERNAL_OBJECTS =
 test_config: CMakeFiles/test_config.dir/tests/test_config.cpp.o
 test_config: CMakeFiles/test_config.dir/build.make
 test_config: libbroccoli.so
+test_config: /usr/local/lib64/libyaml-cpp.a
 test_config: CMakeFiles/test_config.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cheng/workspace/broccoli/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable test_config"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test_config.dir/link.txt --verbose=$(VERBOSE)

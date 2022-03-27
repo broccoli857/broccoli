@@ -61,4 +61,6 @@ stdint.h
 /home/cheng/workspace/broccoli/broccoli/config.h
 ../broccoli/log.h
 /home/cheng/workspace/broccoli/broccoli/log.h
+yaml-cpp/yaml.h
+/home/cheng/workspace/broccoli/tests/yaml-cpp/yaml.h
 

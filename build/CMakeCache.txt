@@ -215,6 +215,9 @@ broccoli_BINARY_DIR:STATIC=/home/cheng/workspace/broccoli/build
 //Value Computed by CMake
 broccoli_SOURCE_DIR:STATIC=/home/cheng/workspace/broccoli
 
+//The directory containing a CMake configuration file for yaml-cpp.
+yaml-cpp_DIR:PATH=/usr/local/share/cmake/yaml-cpp
+
 
 ########################
 # INTERNAL cache entries

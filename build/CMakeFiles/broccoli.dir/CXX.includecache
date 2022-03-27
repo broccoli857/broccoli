@@ -56,6 +56,10 @@ util.h
 memory
 -
 
+/home/cheng/workspace/broccoli/broccoli/util.cpp
+util.h
+/home/cheng/workspace/broccoli/broccoli/util.h
+
 /home/cheng/workspace/broccoli/broccoli/util.h
 pthread.h
 -

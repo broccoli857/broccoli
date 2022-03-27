@@ -30,6 +30,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.16/Modules/Platform/Linux-GNU.cmake"
   "/usr/local/share/cmake-3.16/Modules/Platform/Linux.cmake"
   "/usr/local/share/cmake-3.16/Modules/Platform/UnixPaths.cmake"
+  "/usr/local/share/cmake/yaml-cpp/yaml-cpp-config-version.cmake"
+  "/usr/local/share/cmake/yaml-cpp/yaml-cpp-config.cmake"
+  "/usr/local/share/cmake/yaml-cpp/yaml-cpp-targets-noconfig.cmake"
+  "/usr/local/share/cmake/yaml-cpp/yaml-cpp-targets.cmake"
   )
 
 # The corresponding makefile is:

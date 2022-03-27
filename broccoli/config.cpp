@@ -2,5 +2,5 @@
 
 namespace broccoli {
 
-
+    Config::ConfigVarMap Config::s_datas;
 }

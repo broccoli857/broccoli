@@ -1,1 +1,1 @@
-/opt/rh/devtoolset-7/root/usr/bin/c++   -rdynamic -o0 -ggdb -std=c++11 -Wno-deprecated -Werror -Wno-unused-function  -rdynamic CMakeFiles/test_config.dir/tests/test_config.cpp.o  -o test_config  -Wl,-rpath,/home/cheng/workspace/broccoli/build libbroccoli.so 
+/opt/rh/devtoolset-7/root/usr/bin/c++   -rdynamic -o0 -ggdb -std=c++11 -Wno-deprecated -Werror -Wno-unused-function  -rdynamic CMakeFiles/test_config.dir/tests/test_config.cpp.o  -o test_config  -Wl,-rpath,/home/cheng/workspace/broccoli/build libbroccoli.so /usr/local/lib64/libyaml-cpp.a 

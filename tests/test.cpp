@@ -13,7 +13,6 @@ int main()
 	broccoli::FileLogAppender::ptr file_appender(new broccoli::FileLogAppender("./log.txt"));
 	logger->addAppender(file_appender);
 
-
 	std::cout << "hello broccoli log !" << std::endl;
 
 	BROCCOLI_LOG_DEBUG(logger) << "hello broccoli log";

@@ -1,20 +1,21 @@
 # broccoli
 ## 开发环境
-Centos 7；Visual Studio 2019
+Centos 7; VSCode + remote
 
 ## 项目路径
 
 ## 日志系统
- - logger（定义日志类别）
+ - logger : 定义日志类别
  - |
- - |	--- Formatter（日志格式）
+ - |	--- Formatter : 日志格式
  - |
- - Appender（日志输出地方）
+ - Appender : 日志输出地方
 
 ## 配置系统
 
- - Config ： 使用yaml文件进行配置
+ - Config : 使用yaml文件进行配置
 
+ - yamp-cpp : github
 
 ## 协程库封装
 

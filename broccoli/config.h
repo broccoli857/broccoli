@@ -5,13 +5,18 @@
 #include "log.h"
 
 namespace broccoli {
+
+	/*
+	*	纯虚基类，供其他类继承
+	*	配置信息的基本信息，存储配置信息的名称、描述信息
+	**/
 	class ConfigVarBase {
 	public:
 		typedef std::shared_ptr<ConfigVarBase> ptr;
-		virtual ~ConfigVarBase();
+		virtual ~ConfigVarBase() {}
 		ConfigVarBase(const std::string& name, const std::string& description = "")
 			:m_name(name)
-			,m_description(description){
+			, m_description(description) {
 		}
 
 		std::string getName() const { return m_name; }
@@ -24,6 +29,10 @@ namespace broccoli {
 		std::string m_description;
 	};
 
+	/*
+	*	继承于 ConfigVarBase
+	*	配置信息存储类型，每条配置信息格式由此class定义
+	**/
 	template<class T>
 	class ConfigVar : public ConfigVarBase {
 	public:
@@ -31,9 +40,10 @@ namespace broccoli {
 
 		ConfigVar(const std::string& name, const T& default_value, 
 			const std::string& description = "")
-			: ConfigVarBase(name, description)
+			:ConfigVarBase(name, description)
 			, m_val(default_value) {
 		}
+		// ~ConfigVar() {}
 
 		std::string toString() override {
 			try {
@@ -68,6 +78,9 @@ namespace broccoli {
 	public:
 		typedef std::map<std::string, ConfigVarBase::ptr> ConfigVarMap;
 
+		/*
+		*	如果该配置不存在，将配置信息添加到 s_datas 这个map中
+		**/
 		template<class T>
 		static typename ConfigVar<T>::ptr Lookup(const std::string& name, 
 			const T& default_value, const std::string& description="") {
@@ -87,13 +100,16 @@ namespace broccoli {
 			return v;
 		}
 
+		/*
+		*	检查该配置名(name)是否已经存在
+		**/
 		template<class T>
 		static typename ConfigVar<T>::ptr Lookup(const std::string& name) {
 			auto it = s_datas.find(name);
 			if (it == s_datas.end()) {
 				return nullptr;
 			}
-			return std::dynamic_pointer_cast<ConfigVar<T>>(it->second());
+			return std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
 		}
 
 	private:
