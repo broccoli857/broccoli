@@ -10,7 +10,6 @@ find_package(yaml-cpp REQUIRED)
 include_directories(.)
 include_directories(${YAML_CPP_INCLUDE_DIR})
 include_directories(/usr/lib)
-# include_directories(/usr/local/include/yaml-cpp)
 
 find_library(YAMLCPP yaml-cpp)
 
@@ -21,8 +20,6 @@ set(LIB_SRC
     )
 
 add_library(broccoli SHARED ${LIB_SRC})
-#add_library(broccoli_static STATIC $(LIB_SRC))
-#set_TARGET_PROPERTIES (broccoli_static PROPERTIES OUTPUT_NAME "broccoli")
 
 add_executable(test_log tests/test.cpp)
 add_dependencies(test_log broccoli)
