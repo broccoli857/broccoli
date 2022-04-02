@@ -32,6 +32,7 @@ namespace broccoli {
 
 		virtual std::string toString() = 0;
 		virtual bool fromString(const std::string& val) = 0;
+		virtual std::string getTypeName() const  = 0;
 	private:
 		std::string m_name;
 		std::string m_description;
@@ -227,7 +228,6 @@ namespace broccoli {
 		}
 	};
 
-
 	/*
 	*	继承于 ConfigVarBase
 	*	配置信息存储类型，每条配置信息格式由此class定义
@@ -271,6 +271,7 @@ namespace broccoli {
 
 		const T getValue() const { return m_val; }
 		void setValue(const T& val) { m_val = val; }
+		std::string getTypeName() const override { return typeid(T).name(); }
 	private:
 		T m_val;
 	};
@@ -285,10 +286,18 @@ namespace broccoli {
 		template<class T>
 		static typename ConfigVar<T>::ptr Lookup(const std::string& name, 
 			const T& default_value, const std::string& description="") {
-			auto tmp = Lookup<T>(name);
-			if (tmp) {
-				BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "lookup name=" << name << "exits";
-				return tmp;
+			auto it = s_datas.find(name);
+			if(it != s_datas.end()){
+				auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
+				if(tmp){
+					BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "lookup name=" << name << "exits";
+					return tmp;
+				}else{
+					BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "lookup name=" << name << "exits but type not "
+							<< typeid(T).name() << " real_type=" << it->second->getTypeName()
+							<< " " << it->second->toString();
+					return nullptr;
+				}
 			}
 
 			if (name.find_first_not_of("abcdefghigklmnopqrstuvwxyz._0123456789")

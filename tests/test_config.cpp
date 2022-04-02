@@ -2,8 +2,13 @@
 #include "../broccoli/log.h"
 #include "yaml-cpp/yaml.h"
 
+# if 0
+
 broccoli::ConfigVar<int>::ptr g_int_value_config = 
         broccoli::Config::Lookup("system.port", (int)8080, "system port");
+
+broccoli::ConfigVar<float>::ptr g_int_valueex_config = 
+        broccoli::Config::Lookup("system.port", (float)8080, "system port");
 
 broccoli::ConfigVar<float>::ptr g_float_value_config = 
         broccoli::Config::Lookup("system.value", (float)10.2f, "system value");
@@ -50,11 +55,6 @@ void print_yaml(const YAML::Node& node, int level){
     }
 }
 
-void test_yaml(){
-    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/log.yaml");
-    print_yaml(root, 0);
-}
-
 void test_config(){
     BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "before: " << g_int_value_config->getValue();
     BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "before: " << g_float_value_config->toString();
@@ -99,11 +99,85 @@ void test_config(){
     XX_M(g_int_umap_value_config, int_umap, after);
 }
 
+#endif
+
+class Person {
+public:
+    std::string m_name;
+    int m_age = 0;
+    bool m_sex = 0;
+
+    std::string toString() const {
+        std::stringstream ss;
+        ss << "[Person name=" << m_name
+            << " age=" << m_age
+            << " sex=" << m_sex
+            << "]";
+        return ss.str();
+    }
+};
+
+namespace broccoli {
+    template<>
+    class LexicalCast<std::string, Person> {
+    public:
+        Person operator() (const std::string& v) {
+            YAML::Node node = YAML::Load(v);
+            Person p;
+            p.m_name = node["name"].as<std::string>();
+            p.m_age = node["age"].as<int>();
+            p.m_sex = node["sex"].as<bool>();
+            return p;
+        }
+    };
+
+    template<>
+    class LexicalCast<Person, std::string> {
+    public:
+        std::string operator() (const Person& p) {
+            YAML::Node node;
+            node["name"] = p.m_name;
+            node["age"] = p.m_age;
+            node["sex"] = p.m_sex;
+            std::stringstream ss;
+            ss << node;
+            return ss.str();
+        }
+    };
+}
+
+broccoli::ConfigVar<Person>::ptr g_person = 
+    broccoli::Config::Lookup("class.person", Person(), "system person");
+
+broccoli::ConfigVar<std::map<std::string, Person>>::ptr g_person_map = 
+    broccoli::Config::Lookup("class.map", std::map<std::string, Person>(), "system person");
+
+void test_class() {
+    BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "before: " << g_person->getValue().toString() << " - " << g_person->toString();
+
+#define XX_PM(g_var, prefix) \
+    { \
+        auto m = g_person_map->getValue();  \
+        for(auto& i : m) {  \
+            BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << prefix << ": " << i.first << " - " << i.second.toString();    \
+        }   \
+        BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << prefix << ": size=" << m.size(); \
+    }
+
+    XX_PM(g_person_map, "class.map before");
+
+    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/log.yaml");
+    broccoli::Config::LoadFromYaml(root);
+
+    BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
+
+    XX_PM(g_person_map, "class.map after");
+}
+
 int main(int argc, char** argv)
 {
-    // test_yaml();
-
-    test_config();
+    // test_config();
+    test_class();
 
     return 0;
 }
