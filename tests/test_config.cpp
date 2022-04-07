@@ -115,6 +115,12 @@ public:
             << "]";
         return ss.str();
     }
+
+    bool operator==(const Person& oth) const {
+        return m_name == oth.m_name
+            && m_age == oth.m_age
+            && m_sex == oth.m_sex;
+    }
 };
 
 namespace broccoli {
@@ -163,6 +169,11 @@ void test_class() {
         }   \
         BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << prefix << ": size=" << m.size(); \
     }
+
+    g_person->addListener(10, [](const Person& old_value, const Person& new_value) {
+        BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "old_value=" << old_value.toString()
+            << " new_value=" << new_value.toString();
+    });
 
     XX_PM(g_person_map, "class.map before");
 

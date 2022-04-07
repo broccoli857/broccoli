@@ -13,9 +13,15 @@ Centos 7; VSCode + remote
 
 ## 配置系统
 
- - Config : 使用yaml文件进行配置
+- Config : 使用yaml文件进行配置
 
- - yamp-cpp : github
+- yamp-cpp : github
+
+- 自定义类型，需要实现broccoli::lexicalCast的偏特化
+实现后，就可以支持Config解析自定义类型，自定义类型可以和常规stl容器疫情使用
+
+- 配置的事件机制
+当一个配置发生修改时，可以反向通知对应的代码，回调
 
 ## 协程库封装
 
