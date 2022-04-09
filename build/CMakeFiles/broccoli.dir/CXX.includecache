@@ -34,6 +34,16 @@ yaml-cpp/yaml.h
 log.h
 /home/cheng/workspace/broccoli/broccoli/log.h
 
+/home/cheng/workspace/broccoli/broccoli/log.cpp
+log.h
+/home/cheng/workspace/broccoli/broccoli/log.h
+iostream
+-
+map
+-
+functional
+-
+
 /home/cheng/workspace/broccoli/broccoli/log.h
 string
 -

@@ -85,7 +85,7 @@ void test_config(){
     XX_M(g_int_map_value_config, int_map, before);
     XX_M(g_int_umap_value_config, int_umap, before);
 
-    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/log.yaml");
+    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/test.yaml");
     broccoli::Config::LoadFromYaml(root);
 
     BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "after: " << g_int_value_config->getValue();
@@ -177,7 +177,7 @@ void test_class() {
 
     XX_PM(g_person_map, "class.map before");
 
-    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/log.yaml");
+    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/test.yaml");
     broccoli::Config::LoadFromYaml(root);
 
     BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();

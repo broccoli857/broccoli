@@ -37,10 +37,12 @@
 #define BROCCOLI_LOG_FMT_FATAL(logger, fmt, ...) BROCCOLI_LOG_FMT_LEVEL(logger, broccoli::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 #define BROCCOLI_LOG_ROOT() broccoli::loggerMgr::GetInstance()->getRoot()
+#define BROCCOLI_LOG_NAME(name) broccoli::loggerMgr::GetInstance()->getLogger(name);
 
 namespace broccoli {
 
 	class Logger;
+	class LoggerManager;
 
 	// 日志级别
 	class LogLevel {
@@ -145,6 +147,7 @@ namespace broccoli {
 
 	// 日志器
 	class Logger :public std::enable_shared_from_this<Logger> {
+		friend class LoggerManager;
 	public:
 		typedef std::shared_ptr<Logger> ptr;
 
@@ -169,6 +172,7 @@ namespace broccoli {
 		LogLevel::Level m_level;				// 日志等级
 		std::list<LogAppender::ptr> m_appenders;
 		LogFormatter::ptr m_formatter;			// 日志格式器
+		Logger::ptr m_root;
 	};
 
 	// 输出到控制台的 Appender
@@ -192,6 +196,7 @@ namespace broccoli {
 	private:
 		std::string m_filename;
 		std::ofstream m_filestream;
+		Logger::ptr m_root;
 	};
 
 	class LoggerManager {
