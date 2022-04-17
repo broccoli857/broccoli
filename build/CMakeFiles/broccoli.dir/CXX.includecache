@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/cheng/workspace/broccoli/broccoli/config.cpp
-config.h
-/home/cheng/workspace/broccoli/broccoli/config.h
-
 /home/cheng/workspace/broccoli/broccoli/config.h
 memory
 -
@@ -35,14 +31,16 @@ log.h
 /home/cheng/workspace/broccoli/broccoli/log.h
 
 /home/cheng/workspace/broccoli/broccoli/log.cpp
-log.h
-/home/cheng/workspace/broccoli/broccoli/log.h
 iostream
 -
 map
 -
 functional
 -
+log.h
+/home/cheng/workspace/broccoli/broccoli/log.h
+config.h
+/home/cheng/workspace/broccoli/broccoli/config.h
 
 /home/cheng/workspace/broccoli/broccoli/log.h
 string

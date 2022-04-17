@@ -49,7 +49,8 @@ namespace broccoli {
 	public:
 		enum Level
 		{
-			DEBUG = 1,
+			UNKNOW = 0,
+			DEBUG,
 			INFO,
 			WARN,
 			ERROR,
@@ -57,6 +58,7 @@ namespace broccoli {
 		};
 
 		static const char* ToString(LogLevel::Level level);
+		static LogLevel::Level FromString(const std::string& str);
 	};
 
 	// 日志事件
@@ -122,9 +124,11 @@ namespace broccoli {
 		};
 
 		void init();
+		bool isError() const {return m_error;}
 	private:
 		std::string m_pattern;
 		std::vector<FormatItem::ptr> m_items;
+		bool m_error = false;
 	};
 
 	// 日志输出器
@@ -163,10 +167,16 @@ namespace broccoli {
 		void addAppender(LogAppender::ptr appender);
 		void delAppender(LogAppender::ptr appender);
 
+		void clearAppenders();
+
 		void setLevel(LogLevel::Level val) { m_level = val; }
 		LogLevel::Level getLevel() const{ return m_level; }
 
 		std::string getName() const { return m_name; }
+
+		void setFormatter(LogFormatter::ptr val);
+		void setFormatter(const std::string& val);
+		LogFormatter::ptr getFormatter();
 	private:
 		std::string m_name;
 		LogLevel::Level m_level;				// 日志等级

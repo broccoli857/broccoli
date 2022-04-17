@@ -25,6 +25,21 @@ namespace broccoli {
 		return "UNKNOW";
 	}
 
+	LogLevel::Level LogLevel::FromString(const std::string& str) {
+#define XX(name) \
+		if(str == #name) { \
+			return LogLevel::name; \
+		}
+
+		XX(DEBUG);
+		XX(INFO);
+		XX(WARN);
+		XX(ERROR);
+		XX(FATAL);
+		return LogLevel::UNKNOW;
+#undef XX
+	}
+
 	class MessageFormatItem : public LogFormatter::FormatItem {
 	public:
 		MessageFormatItem(const std::string& str = "") {
@@ -229,6 +244,26 @@ namespace broccoli {
 		}
 	}
 
+	void Logger::setFormatter(LogFormatter::ptr val) {
+		m_formatter = val;
+	}
+
+	void Logger::setFormatter(const std::string& val) {
+		broccoli::LogFormatter::ptr new_val(new broccoli::LogFormatter(val));
+		if(new_val->isError()) {
+			std::cout << "Logger setFormatter name =" << m_name
+						<< " value=" << val << " invalid formatter"
+						<< std::endl;
+			return;
+		}
+
+		m_formatter = new_val;
+	}
+
+	LogFormatter::ptr Logger::getFormatter() {
+		return m_formatter;
+	}
+
 	void Logger::debug(LogEvent::ptr event) {
 		log(LogLevel::DEBUG, event);
 	}
@@ -247,6 +282,10 @@ namespace broccoli {
 
 	void Logger::fatal(LogEvent::ptr event) {
 		log(LogLevel::FATAL, event);
+	}
+
+	void Logger::clearAppenders(){
+		m_appenders.clear();
 	}
 
 	void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
@@ -349,9 +388,9 @@ namespace broccoli {
 				vec.push_back(std::make_tuple(str, fmt, 1));
 				i = n - 1;
 			}
-			else if (fmt_status == 1) {
+			else if (fmt_status == 1) { // l
 				std::cout << "pattern parse error: " << m_pattern << " - " << m_pattern.substr(i) << std::endl;
-				//m_error = true;
+				m_error = true;
 				vec.push_back(std::make_tuple("<<pattern_error>>", fmt, 0));
 			}
 		}
@@ -386,7 +425,7 @@ namespace broccoli {
 				auto it = s_format_items.find(std::get<0>(i));
 				if (it == s_format_items.end()) {
 					m_items.push_back(FormatItem::ptr(new StringFormatItem("<<error_format %" + std::get<0>(i) + ">>")));
-					//m_error = true;
+					m_error = true;
 				}
 				else {
 					m_items.push_back(it->second(std::get<1>(i)));
@@ -446,6 +485,66 @@ namespace broccoli {
 		}
 	};
 
+	template<>
+	class LexicalCast<std::string, std::set<LogDefine>> {
+	public:
+		std::set<LogDefine> operator() (const std::string& v) {
+			YAML::Node node = YAML::Load(v);
+			std::set<LogDefine> vec;
+
+			for(size_t i=0; i<node.size(); ++i) {
+				auto n = node[i];
+				if(!a["name"].IsDefined()) {
+					std::cout << "log config error: name is null, " << n
+							<< std::endl;
+					continue;
+				}
+
+				LogDefine ld;
+				ld.name = a["name"].as<std::string>();
+				ld.level = LogLevel::FromString(a["level"].IsDefined() ? a["level"].as<std::string>() : "");
+				if(a["formatter"].IsDefined()) {
+					ld.formatter = a["formatter"].as<std::string>();
+				}
+
+				if(a["appenders"].IsDefined()) {
+					for(size_t x=0; x<a["appenders"].size(); ++x) {
+						auto a = n["appenders"][x];
+						if(!a["type"].IsDefined()) {
+							std::cout << "log config error: name is null, " << a
+									<< std::endl;
+							continue;
+						}
+						std::string type = a["type"].as<std::string>();
+						LogAppenderDefine lad;
+						if(type == "FileLogAppender") {
+							lad.type = 1;
+							if(!a["file"].IsDefined()) {
+								std::cout << "log config error: name is null, " << a
+										<< std::endl;
+								continue;
+							}
+							lad.file = a["file"].as<std::string>();
+							if(a["formatter"].IsDefined()) {
+								lad.formatter = a["formatter"].as<std::string>();
+							}
+						} else if(type == "StdoutLogAppender") {
+							lad.type = 2;
+						}else {
+							std::cout << "log config error: appender type is invalid, "
+										<< std::endl;
+							continue;
+						}
+						ld.appenders.push_back(lad);
+					}
+				}
+				vec.insert(ld);
+			}
+			return vec;
+		}
+	};
+
+
 	broccoli::ConfigVar<std::set<LogDefine>> g_log_defines = 
 		broccoli::Config::Lookup("logs", std::set<LogDefine>(), "logs config");
 
@@ -454,6 +553,49 @@ namespace broccoli {
 			g_log_defines->addListener(0xF1E231, [](const std::set<LogDefine>& old_value, 
 					const std::set<LogDefine>& new_value){
 
+				BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "on_logger_conf_changed";
+
+				for(auto& i : new_value) {
+					auto it = old_value.find(i);
+					broccoli::Logger::ptr logger;
+					if(it == new_value.end()) {
+						// 新增 logger
+						logger.reset(new broccoli::Logger(i.name));
+					} else {
+						if(!(i == *it)) {
+							// 修改的logger
+							logger = BROCCOLI_LOG_NAME(i.name);
+						}
+					}
+
+					logger->setLevel(i.level);
+					if(!i.formatter.empty()) {
+						logger->setFormatter(i.formatter);
+					}
+
+					logger->clearAppenders();
+					for(auto& a : i.appenders) {
+						broccoli::LogAppender::ptr ap;
+						if(a.type == 1) {
+							ap.reset(new FileLogAppender(i.file));
+						}else if (a.type == 2) {
+							ap.reset(new StdoutLogAppender);
+						}
+						ap->setLevel(a.level);
+						logger->addAppender(ap);
+					}
+				}
+
+				for (auto& i : old_value) {
+					auto it = new_value.find(i);
+					if(it == new_value.end()) {
+						// 删除logger
+						auto logger = BROCCOLI_LOG_NAME(i.name);
+						logger->setLevel((LogLevel::Level)100);
+						logger->clearAppenders();
+					}
+				}
+				
 			});
 		}
 	};
