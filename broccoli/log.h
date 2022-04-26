@@ -1,4 +1,12 @@
-﻿#pragma once
+﻿/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: cheng
+ * @Date: 2022-04-26 21:42:29
+ * @LastEditors: cheng
+ * @LastEditTime: 2022-04-26 21:51:19
+ */
+#pragma once
 
 #include <string>
 #include <stdint.h>
@@ -123,7 +131,13 @@ public:
 		virtual void format(std::ostream& os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
 	};
 
+	/**
+	 * @brief: 解析 m_pattern 设置格式，解析成格式对应对象，存储到 m_items 数组中
+	 * @param {*}
+	 * @return {*}
+	 */	
 	void init();
+
 	bool isError() const {return m_error;}
 	const std::string getPattern() const {return m_pattern;}
 private:
