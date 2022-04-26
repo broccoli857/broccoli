@@ -5,7 +5,9 @@
             "label": "cmake",
             "type": "shell",
             "command": "cmake",
-            "args": ["../"],
+            "args": [
+                "../"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
             }
@@ -14,15 +16,23 @@
             "label": "make",
             "type": "shell",
             "command": "make",
-            "args": ["-j20"],  //这里cmake -j20 表示 使用20核编译代码，可选项
-            "dependsOn": ["cmake"],
+            "args": [
+                "-j20"
+            ],
+            "dependsOn": [
+                "cmake"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
             }
         },
         {
             "label": "build",
-            "dependsOn": ["cmake","make"]
+            "dependsOn": [
+                "cmake",
+                "make"
+            ],
+            "problemMatcher": []
         }
     ]
 }

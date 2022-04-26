@@ -98,7 +98,6 @@ void test_config(){
     XX_M(g_int_map_value_config, int_map, after);
     XX_M(g_int_umap_value_config, int_umap, after);
 }
-
 #endif
 
 class Person {
@@ -170,7 +169,7 @@ void test_class() {
         BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << prefix << ": size=" << m.size(); \
     }
 
-    g_person->addListener(10, [](const Person& old_value, const Person& new_value) {
+    g_person->addListener([](const Person& old_value, const Person& new_value) {
         BROCCOLI_LOG_INFO(BROCCOLI_LOG_ROOT()) << "old_value=" << old_value.toString()
             << " new_value=" << new_value.toString();
     });
@@ -185,10 +184,31 @@ void test_class() {
     XX_PM(g_person_map, "class.map after");
 }
 
+
+
+void test_log() {
+
+    std::cout << "hello world!" << std::endl;
+    static broccoli::Logger::ptr system_log = BROCCOLI_LOG_NAME("system");
+    BROCCOLI_LOG_INFO(system_log) << "hello system" << std::endl;
+    std::cout << broccoli::loggerMgr::GetInstance()->toYamlString() << std::endl;
+    YAML::Node root = YAML::LoadFile("/home/cheng/workspace/broccoli/bin/conf/log.yaml");
+    broccoli::Config::LoadFromYaml(root);
+    std::cout << "========================" << std::endl;
+    std::cout << broccoli::loggerMgr::GetInstance()->toYamlString() << std::endl;
+    std::cout << "========================" << std::endl;
+    std::cout << root << std::endl;
+    BROCCOLI_LOG_INFO(system_log) << "hello system" << std::endl;
+
+    system_log->setFormatter("%d - %m%n");
+    BROCCOLI_LOG_INFO(system_log) << "hello system" << std::endl;
+}
+
 int main(int argc, char** argv)
 {
     // test_config();
-    test_class();
+    // test_class();
+    test_log();
 
     return 0;
 }

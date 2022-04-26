@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/cheng/workspace/broccoli/broccoli/config.cpp
+config.h
+/home/cheng/workspace/broccoli/broccoli/config.h
+
 /home/cheng/workspace/broccoli/broccoli/config.h
 memory
 -
@@ -30,6 +34,14 @@ yaml-cpp/yaml.h
 log.h
 /home/cheng/workspace/broccoli/broccoli/log.h
 
+/home/cheng/workspace/broccoli/broccoli/env.h
+map
+-
+vector
+-
+singleton.h
+/home/cheng/workspace/broccoli/broccoli/singleton.h
+
 /home/cheng/workspace/broccoli/broccoli/log.cpp
 iostream
 -
@@ -41,6 +53,8 @@ log.h
 /home/cheng/workspace/broccoli/broccoli/log.h
 config.h
 /home/cheng/workspace/broccoli/broccoli/config.h
+env.h
+/home/cheng/workspace/broccoli/broccoli/env.h
 
 /home/cheng/workspace/broccoli/broccoli/log.h
 string
@@ -71,6 +85,8 @@ memory
 -
 
 /home/cheng/workspace/broccoli/broccoli/util.h
+cxxabi.h
+-
 pthread.h
 -
 unistd.h

@@ -6,10 +6,8 @@ int main()
 {
 	broccoli::Logger::ptr logger(new broccoli::Logger);
 
-	// 输出到命令行窗口
 	logger->addAppender(broccoli::LogAppender::ptr(new broccoli::StdoutLogAppender));
 
-	// 输出到文件 
 	broccoli::FileLogAppender::ptr file_appender(new broccoli::FileLogAppender("./log.txt"));
 	logger->addAppender(file_appender);
 

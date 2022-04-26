@@ -8,6 +8,7 @@ CMakeFiles/broccoli.dir/broccoli/config.cpp.o: ../broccoli/singleton.h
 CMakeFiles/broccoli.dir/broccoli/config.cpp.o: ../broccoli/util.h
 
 CMakeFiles/broccoli.dir/broccoli/log.cpp.o: ../broccoli/config.h
+CMakeFiles/broccoli.dir/broccoli/log.cpp.o: ../broccoli/env.h
 CMakeFiles/broccoli.dir/broccoli/log.cpp.o: ../broccoli/log.cpp
 CMakeFiles/broccoli.dir/broccoli/log.cpp.o: ../broccoli/log.h
 CMakeFiles/broccoli.dir/broccoli/log.cpp.o: ../broccoli/singleton.h
